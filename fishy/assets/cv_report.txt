@@ -1,0 +1,76 @@
+2137 photos -> 1511 used (max 30 per fish, evenly spaced) from 86 fish
+                        photos  fish
+label                               
+bacterial_gill_disease     275    27
+bacterial_red_disease      634    35
+eus                        302    14
+healthy                    300    10
+
+=== fold 1/5: train 1145 photos / 68 fish | test 366 photos / 18 fish ===
+fold 1 photo accuracy: 0.891
+
+=== fold 2/5: train 1232 photos / 68 fish | test 279 photos / 18 fish ===
+fold 2 photo accuracy: 0.710
+
+=== fold 3/5: train 1224 photos / 70 fish | test 287 photos / 16 fish ===
+fold 3 photo accuracy: 0.641
+
+=== fold 4/5: train 1237 photos / 69 fish | test 274 photos / 17 fish ===
+fold 4 photo accuracy: 0.887
+
+=== fold 5/5: train 1206 photos / 69 fish | test 305 photos / 17 fish ===
+fold 5 photo accuracy: 0.803
+
+##### RESULTS - every photo predicted by a model that never saw that fish #####
+Photo-level accuracy: 0.792
+                        precision    recall  f1-score   support
+
+bacterial_gill_disease      0.992     0.956     0.974       275
+ bacterial_red_disease      0.725     0.850     0.783       634
+                   eus      0.638     0.315     0.421       302
+               healthy      0.845     0.997     0.914       300
+
+              accuracy                          0.792      1511
+             macro avg      0.800     0.779     0.773      1511
+          weighted avg      0.780     0.792     0.772      1511
+
+Fish-level accuracy (photos of one fish averaged): 0.837 over 86 fish
+(only a few fish per class, so treat every number here as +/- 10 points)
+predicted               bacterial_gill_disease  bacterial_red_disease  eus  healthy
+true                                                                               
+bacterial_gill_disease                      27                      0    0        0
+bacterial_red_disease                        0                     32    2        1
+eus                                          0                     11    3        0
+healthy                                      0                      0    0       10
+
+Diseased photos wrongly called HEALTHY: 4.5%   <- the dangerous mistake
+Healthy photos wrongly called diseased: 0.3%
+
+Photo accuracy by class x species:
+fish_category           Grass_carp_(Ctenopharyngodon idella)  Rui_(Labeo rohita)  Silver_carp_(Hypophthalmichthys molitrix)
+label                                                                                                                      
+bacterial_gill_disease                                  0.96                0.98                                       0.93
+bacterial_red_disease                                   0.84                0.87                                       0.83
+eus                                                     0.50                0.29                                       0.00
+healthy                                                 1.00                0.99                                       1.00
+
+Photo accuracy by class x capture date (big gaps between dates = the model may be reading the day/background):
+date                    20260205  20260206  20260207  20260212  20260213  20260315
+label                                                                             
+bacterial_gill_disease      0.93      1.00      1.00      0.90      0.94       NaN
+bacterial_red_disease       0.88      0.98      0.88      0.73      0.98       NaN
+eus                          NaN      0.00      0.59      0.18      0.62       NaN
+healthy                      NaN       NaN       NaN       NaN      0.99       1.0
+
+If the app only answered when confident:
+  confidence >= 0.5: answers 100% of photos, accuracy 0.793
+  confidence >= 0.6: answers 97% of photos, accuracy 0.802
+  confidence >= 0.7: answers 94% of photos, accuracy 0.807
+  confidence >= 0.8: answers 90% of photos, accuracy 0.812
+  confidence >= 0.9: answers 84% of photos, accuracy 0.824
+
+##### Final model (trained on all fish) #####
+TFLite input: [1, 224, 224, 3] | output: [1, 4]
+TFLite vs Keras: max logit difference 0.00004, same answer on 100% of photos
+nearest-neighbour (the OLD app resize): same answer as the training-style resize on 100% of 20 full-size photos
+box/average: same answer as the training-style resize on 100% of 20 full-size photos

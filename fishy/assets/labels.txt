@@ -1,0 +1,5 @@
+bacterial_gill_disease
+bacterial_red_disease
+eus
+other_disease
+healthy
